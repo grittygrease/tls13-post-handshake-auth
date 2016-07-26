@@ -160,8 +160,8 @@ The Handshake context and Base Key are defined in the following table
 
 | Mode | Handshake Context | Base Key |
 |------|-------------------|----------|
-| Spontaneous Authentication | ClientHello ... ClientFinished | traffic_secret_0 |
-| Elicited Authentication | ClientHello ... ClientFinished + CertificateRequest | traffic_secret_0 |
+| Spontaneous Authentication | ClientHello ... ClientFinished | traffic_secret_N |
+| Elicited Authentication | ClientHello ... ClientFinished + CertificateRequest | traffic_secret_N |
 
 ### Finished Message
 
