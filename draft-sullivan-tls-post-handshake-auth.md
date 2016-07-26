@@ -183,8 +183,8 @@ Certificate, Finished
 
 where the Certificate message has an empty certificate_list field. The Certificate message must contain the same certificate_request_context as the CertificateRequest message. Non-empty Certificate messages should conform to the certificate_authorities and certificate_extensions sent in the CertificateRequest.
 
-<- CertificateRequest
--> Certificate, CertificateVerify, Finished
+	<- CertificateRequest
+	-> Certificate, CertificateVerify, Finished
 
 Because client authentication may require prompting the user, servers MUST be prepared for some delay, including receiving an arbitrary number of other messages between sending the CertificateRequest and receiving a response. In addition, clients which receive multiple CertificateRequests in close succession MAY respond to them in a different order than they were received (the certificate_request_context value allows the server to disambiguate the responses).
 
@@ -192,7 +192,7 @@ Because client authentication may require prompting the user, servers MUST be pr
 
 This flow is initiated by a contiguous sequence of Certificate, CertificateVerify, Finished message from the client to the server. The Certificate message should contain an odd-valued certificate_request_context so as not to collide with an elicited client authentication. The Certificate message should conform to the certificate_authorities and certificate_extensions sent in the CertificateRequest and the SignatureSchemes presented in the ClientAuth extension from the server’s EncryptedExtensions message.
 
--> Certificate, CertificateVerify, Finished
+	-> Certificate, CertificateVerify, Finished
 
 ### Elicited Server Authentication Flow
 
@@ -206,8 +206,8 @@ Certificate, Finished
 
 where the Certificate message has an empty certificate_list field. The Certificate message must contain the same certificate_request_context as the CertificateRequest message. The Certificate message should conform to the ServerNameList sent in the CertificateRequest and the SignatureSchemes presented in the ClientHello.
 
--> CertificateRequest
-<- Certificate, CertificateVerify, Finished
+	-> CertificateRequest
+	<- Certificate, CertificateVerify, Finished
 
 Clients MUST be prepared for some delay, including receiving an arbitrary number of other messages between sending the CertificateRequest and receiving a response. In addition, servers which receive multiple CertificateRequests in close succession MAY respond to them in a different order than they were received (the certificate_request_context value allows the server to disambiguate the responses).
 
@@ -215,7 +215,7 @@ Clients MUST be prepared for some delay, including receiving an arbitrary number
 
 This flow is initiated by a contiguous sequence of Certificate, CertificateVerify, Finished message from the server to the client. The Certificate message should contain an even-valued certificate_request_context so as not to collide with an elicited server authentication. The Certificate message should conform to the SignatureSchemes presented in the ClientHello.
 
-<- Certificate, CertificateVerify, Finished
+	<- Certificate, CertificateVerify, Finished
 
 Interaction between resumption
 
