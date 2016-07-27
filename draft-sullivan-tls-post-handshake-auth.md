@@ -134,12 +134,10 @@ The certificate message is used to transport the certificate. It mirrors the Cer
 	struct {
 	  opaque certificate_request_context<0..2^8-1>;
 	  ASN1Cert certificate_list<0..2^24-1>;
-	  struct {
-	    Extension extensions<0..2^16-1>;
-	  } Extensions;
+	  Extension extensions<0..2^16-1>;
 	} Certificate;
 
-Valid extensions include OCSP Status extensions ([RFC6066] and [RFC6961]) and SignedCertificateTimestamps ([RFC6962]). These extension must only be presented if the handshake negotiation these extensions to be presented in the EncryptedExtensions message.
+Valid extensions include OCSP Status extensions ([RFC6066] and [RFC6961]) and SignedCertificateTimestamps ([RFC6962]). Any extension presented in a Certificate message must only be presented if the associated ClientHello extension was presented in the initial handshake.
 
 The certificate_request_context is an opaque string that identifies the certificate. If the certificate is used in response to a CertificateRequest, it must mirror the certificate_request_context sent in the CertificateRequest. If the Certificate message is part of an elicited authentication, the certificate_request_context is chosen uniquely by the sender.
 
