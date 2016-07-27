@@ -51,10 +51,6 @@ This document describes a mechanism for performing post-handshake certificate-ba
 
 This document defines a way to authenticate one party of a Transport Layer Security (TLS) communication to another using a certificate after the session has been established. This allows both the client and server elicit proof of ownership of additional identities at any time after the handshake has completed. It also allows for both the client and server to spontaneously provide a certificate and proof of ownership of the private key to the other party.
 
-This mechanism is useful in the following situations:
-
-This document defines a way to authenticate one party of a Transport Layer Security (TLS) communication to another using a certificate after the session has been established. This allows both the client and server elicit proof of ownership of additional identities at any time after the handshake has completed. It also allows for both the client and server to spontaneously provide a certificate and proof of ownership of the private key to the other party.
-
 * This mechanism is useful in the following situations:
 * servers that have the ability to serve requests from multiple domains over the same connection but do not have a certificate that is simultaneously authoritative over all of them
 * servers that have resources that require client authentication to access and need to request client authentication after the connection has started
