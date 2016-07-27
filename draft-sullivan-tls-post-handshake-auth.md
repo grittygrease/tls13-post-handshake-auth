@@ -95,6 +95,8 @@ server_auth_spontaneous
 
 The client includes a PostHandshakeAuth extension containing every type of authentication flow it supports in its ClientHello. The server replies with an EncryptedExtensions containing a PostHandshaekAuth extension containing a list of authentication types and the list of signature schemes supported. The set of AuthTypes in the server’s PosthandshakeAuth extension MUST be a subset of the set sent by the client. The extension may be omitted if the server does not support any form of post-handshake authentication.
 
+If a server supports either client_auth_elicited, or client_auth_spontaneous, it must also include a "signature_algorithms" extension (defined in TLS 1.3 section 4.2.2.) containing a list of supported signature schemes. This contains a list of the signature algorithms that the server is able to verify, listed in descending order of preference.
+
 ## Post-Handshake Authentication Messages
 
 The messages used for post-handshake authentication closely mirror those used to authenticate certificates in the standard TLS handshake.
@@ -136,6 +138,19 @@ The certificate message is used to transport the certificate. It mirrors the Cer
 	  ASN1Cert certificate_list<0..2^24-1>;
 	  Extension extensions<0..2^16-1>;
 	} Certificate;
+
+certificate_request_context
+: If this message is in response to a CertificateRequest, the
+  value of certificate_request_context in that message.
+
+certificate_list
+: This is a sequence (chain) of certificates. The sender's
+  certificate MUST come first in the list. Each following
+  certificate SHOULD directly certify one preceding it. Because
+  certificate validation requires that trust anchors be distributed
+  independently, a certificate that specifies a
+  trust anchor MAY be omitted from the chain, provided that
+  supported peers are known to possess any omitted certificates.
 
 Valid extensions include OCSP Status extensions ([RFC6066] and [RFC6961]) and SignedCertificateTimestamps ([RFC6962]). Any extension presented in a Certificate message must only be presented if the associated ClientHello extension was presented in the initial handshake.
 
@@ -186,11 +201,15 @@ where the Certificate message has an empty certificate_list field. The Certifica
 
 Because client authentication may require prompting the user, servers MUST be prepared for some delay, including receiving an arbitrary number of other messages between sending the CertificateRequest and receiving a response. In addition, clients which receive multiple CertificateRequests in close succession MAY respond to them in a different order than they were received (the certificate_request_context value allows the server to disambiguate the responses).
 
+Any certificates provided by the client MUST be signed using a signature algorithm found in the server's "signature_algorithms" extension. The end entity certificate MUST allow the key to be used for signing (i.e., the digitalSignature bit MUST be set if the Key Usage extension is present) with a signature scheme indicated in the server’s "signature_algorithms" extension.
+
 ### Spontaneous Client Authentication Flow
 
 This flow is initiated by a contiguous sequence of Certificate, CertificateVerify, Finished message from the client to the server. The Certificate message should contain an even-valued certificate_request_context so as not to collide with an elicited client authentication. The Certificate message should conform to the certificate_authorities and certificate_extensions sent in the CertificateRequest and the SignatureSchemes presented in the ClientAuth extension from the server’s EncryptedExtensions message.
 
 	-> Certificate, CertificateVerify, Finished
+
+Any certificates provided by the client MUST be signed using a signature algorithm found in the server's "signature_algorithms" extension. The end entity certificate MUST allow the key to be used for signing (i.e., the digitalSignature bit MUST be set if the Key Usage extension is present) with a signature scheme indicated in the server’s "signature_algorithms" extension.
 
 ### Elicited Server Authentication Flow
 
