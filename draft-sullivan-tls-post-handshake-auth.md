@@ -32,7 +32,6 @@ author:
     email: michael.bishop@microsoft.com
 
 normative:
-  RFC3546:
   RFC6066:
   RFC6961:
   RFC6962:
@@ -117,13 +116,13 @@ opaque DistinguishedName<1..2^16-1>;
 	      DistinguishedName certificate_authorities<0..2^16-1>;
 	      CertificateExtension certificate_extensions<0..2^16-1>;
 	    case client:
-	      ServerNameList server_name_list;
+	      HostName host_name<1..2^16-1>;
 	  }
 	} CertificateRequest;
 
 The certificate_request_context is an opaque string which identifies the certificate request and which will be echoed in the corresponding Certificate message.
 
-For CertificateRequests sent from the server, the DistinguishedName and CertificateExtension fields are defined exactly as in the TLS 1.3 specification. For CertificateRequests send from the client, a ServerNameList containing the subject name indication used for selecting the certificate is included. The structure of this field is defined in RFC 3546 [RFC3546].
+For CertificateRequests sent from the server, the DistinguishedName and CertificateExtension fields are defined exactly as in the TLS 1.3 specification. For CertificateRequests send from the client, a HostName containing the Server Name Indication (defined in RFC 6066 [RFC6066]) used for selecting the certificate is included.
 
 ### Certificate Message
 
