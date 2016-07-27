@@ -190,13 +190,13 @@ Because client authentication may require prompting the user, servers MUST be pr
 
 ### Spontaneous Client Authentication Flow
 
-This flow is initiated by a contiguous sequence of Certificate, CertificateVerify, Finished message from the client to the server. The Certificate message should contain an odd-valued certificate_request_context so as not to collide with an elicited client authentication. The Certificate message should conform to the certificate_authorities and certificate_extensions sent in the CertificateRequest and the SignatureSchemes presented in the ClientAuth extension from the server’s EncryptedExtensions message.
+This flow is initiated by a contiguous sequence of Certificate, CertificateVerify, Finished message from the client to the server. The Certificate message should contain an even-valued certificate_request_context so as not to collide with an elicited client authentication. The Certificate message should conform to the certificate_authorities and certificate_extensions sent in the CertificateRequest and the SignatureSchemes presented in the ClientAuth extension from the server’s EncryptedExtensions message.
 
 	-> Certificate, CertificateVerify, Finished
 
 ### Elicited Server Authentication Flow
 
-This flow is initiated by a CertificateRequest message from the client to the server. The CertificateRequest should contain an even-valued certificate_request_context. Upon receiving a CertificateRequest message, the server may respond with either a certificate with a contiguous sequence of:
+This flow is initiated by a CertificateRequest message from the client to the server. The CertificateRequest should contain an odd-valued certificate_request_context. Upon receiving a CertificateRequest message, the server may respond with either a certificate with a contiguous sequence of:
 
 Certificate, CertificateVerify, Finished
 
