@@ -66,33 +66,34 @@ This document intends to replace much of the functionality of secure renegotiati
 
 This document describes four new post handshake authentication flows: client-triggered server authentication, spontaneous server authentication, server-triggered client authentication, and spontaneous client authentication. It also defines two new handshake extensions and several additional post-handshake messages, which mirror some of the messages in the TLS 1.3 handshake.
 
-## TLS Extensions
+## Post-Handshake Authentication TLS Extension
 
-We define a pair of new TLS extensions to advertise support for post-handshake authentication.
+We define a new TLS extension to advertise support for post-handshake authentication.
 
-### Client Authentication Extensions
-
-	enum { client_auth_elicited(0), client_auth_spontaneous(1), (255) } ClientAuthType; 
+	enum { client_auth_elicited(0), client_auth_spontaneous(1), server_auth_elicited(2), server_auth_spontaneous(3), (255) } AuthTypes; 
 	struct {
-	  ClientAuthType client_auth_types<0..2^16-1>;
+	  AuthType auth_types<0..2^8-1>;
 	  select (Role) {
 	    case server:
 	      SignatureScheme supported_signature_algorithms<2..2^16-2>
 	  }
-	} ClientAuth;
+	} PostHandshakeAuth;
 
-The client advertises every type of client authentication it supports in ClientAuth extension in its ClientHello. The server replies with an EncryptedExtensions containing a ClientAuth extension containing a list of client authentication types and the list of signature schemes supported. The set of ClientAuthTypes in the server’s ClientAuth extension MUST be a subset of the set sent by the client. The extension may be omitted if the server does not support any form of post-handshake client authentication.
+Each AuthType value represents support for a given authentication flow.
 
-### Server Authentication Extensions
+client_auth_elicited
+: indicates support for client authentication initiated by a server request
 
-The ServerAuth hello extension is used to negotiate support for post-handshake server authentication.
+client_auth_spontaneous
+: indicates support for client authentication initiated by the client
 
-	enum { server_auth_elicited(0), server_auth_spontaneous(1), (255) } ServerAuthType; 
-	struct {
-	  ServerAuthType server_auth_types<0..2^16-1>;
-	} ServerAuth;
+server_auth_elicited
+: indicates support for server authentication initiated by a client request
 
-   The client advertises every type of server authentication it supports in its ClientHello. The server replies with EncryptedExtensions containing a ServerAuth extension containing a list of server authentication types. The set of ServerAuthTypes in the server’s ServerAuth extension MUST be a subset of the set sent by the client. The extension may be omitted if the server does not support any form of post-handshake server authentication.
+server_auth_spontaneous
+: indicates support for server authentication initiated by the server
+
+The client includes a PostHandshakeAuth extension containing every type of authentication flow it supports in its ClientHello. The server replies with an EncryptedExtensions containing a PostHandshaekAuth extension containing a list of authentication types and the list of signature schemes supported. The set of AuthTypes in the server’s PosthandshakeAuth extension MUST be a subset of the set sent by the client. The extension may be omitted if the server does not support any form of post-handshake authentication.
 
 ## Post-Handshake Authentication Messages
 
