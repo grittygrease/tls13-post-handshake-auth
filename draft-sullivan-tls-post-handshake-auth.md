@@ -228,8 +228,8 @@ certificate_request_context is chosen uniquely by the sender.
 
 ## CertificateVerify Message
 
-The CertificateVerify message used in this document is defined in section
-4.3.2. of the TLS 1.3 specification.
+The CertificateVerify message used in this document is defined in Section
+4.3.2 of {{!I-D.ietf-tls-tls13}}.
 
 ~~~
     struct {
@@ -239,30 +239,58 @@ The CertificateVerify message used in this document is defined in section
 ~~~
 
 The algorithm field specifies the signature algorithm used (see Section 4.2.2 of
-TLS 1.3). The signature is a digital signature using that algorithm that covers
-the hash output:
+{{!I-D.ietf-tls-tls13}}). The signature is a digital signature using that
+algorithm that covers the handshake context, the resumption context and a hash
+of the CertificateRequest and Certificate messages:
 
 ~~~
-    Hash(Handshake Context + Certificate) + Hash(resumption_context)
+    Hash(handshake_context) + resumption_context +
+        Hash(CertificateRequest* + Certificate)
 ~~~
 
-The Handshake context and Base Key are defined in the following table:
+Note that the CertificateRequest message is omitted with spontaneous
+authentication.
 
-| Mode | Handshake Context | Base Key |
-|------|-------------------|----------|
-| Spontaneous Authentication | ClientHello ... ClientFinished | traffic_secret_N |
-| Elicited Authentication | ClientHello ... ClientFinished + CertificateRequest | traffic_secret_N |
+The value of handshake_context is the entire transcript of the initial
+handshake, starting from the first ClientHello up to the final Finished message
+from the client.  The value of resumption_context is defined in Section 4.4.1 of
+{{!I-D.ietf-tls-tls13}}.
+
+The context string that is input to the digital signature is formed by taking
+the endpoint role and the authentication mode.  The final value is the
+concatenation of the ASCII-encoded strings:
+
+* "TLS 1.3, "
+
+* either "client" if the client is authenticating, or "server" if the server is
+  authenticating
+
+* a single space " " (0x20)
+
+* "spontaneous" if no request was made; "solicited" if the peer sent a
+  CertificateRequest
+
+* " CertificateVerify"
+
+Thus, a client that is responding to a CertificateRequest will use the string
+"TLS 1.3, client solicited CertificateVerify" as the context string.
 
 ## Finished Message
 
-Finished is a MAC over the value
+Finished is defined in Section 4.3.3 of {{!I-D.ietf-tls-tls13}}.  When included
+in post-handshake authentication it includes a MAC over the value:
 
 ~~~
-    Hash(Handshake Context + Certificate + CertificateVerify) +
-        Hash(resumption_context)
+    Hash(Handshake Context) + resumption_context +
+        Hash(CertificateRequest* + Certificate + CertificateVerify)
 ~~~
 
-The Finished messages uses a MAC key derived from the base key.
+Note that the CertificateRequest message is omitted with spontaneous
+authentication.
+
+The Finished message uses the current traffic secret (traffic_secret_N) as the
+MAC key; the hash function and HMAC function are the negotiated PRF hash
+function.
 
 
 # Post-Handshake Authentication Flows
