@@ -76,24 +76,23 @@ This mechanism is useful in the following situations:
   connection
 
 * clients that wish to ask a server to authenticate for a new domain not covered
-  by the initial connection certificate
+  by the certificate included in the initial handshake
 
-This document intends to replace much of the functionality of renegotiation in
-previous versions of TLS. It has the advantages over renegotiation of only
-requiring one round trip and maintaining the same application keys during a
-connection.
+This document intends to replace the use of renegotiation for changing the
+authentication of peers. It has an advantage over renegotiation in that it only
+takes at most one round trip and it does not include an additional key exchange.
 
-This document describes four new post handshake authentication flows:
-client-triggered server authentication, spontaneous server authentication,
-server-triggered client authentication, and spontaneous client
-authentication. It also defines two new handshake extensions and several
-additional post-handshake messages, which mirror some of the messages in the TLS
-1.3 handshake.
+This document describes spontaneous and solicited modes for both client and
+server authentication.  Support for each of these modes is negotiated using a
+new `post_handshake_auth` extension.  New handshake messages are defined for use
+after completion of the initial handshake, these mirror the authentication
+messages that are used in the TLS 1.3 handshake.
 
-## Post-Handshake Authentication TLS Extension
 
-We define a new `post_handshake_auth` TLS extension to advertise support for
-post-handshake authentication.
+# Post-Handshake Authentication TLS Extension
+
+The `post_handshake_auth` TLS extension advertises support for post-handshake
+authentication.
 
 ~~~
     enum {
