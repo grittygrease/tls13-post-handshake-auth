@@ -120,7 +120,7 @@ CertificateVerify, and Finished message.
 
 No application data records or any other handshake messages can be interleaved
 with these messages.  An endpoint MUST abort a connection if it does not receive
-these message in a contiguous sequence.  A fatal `unexpected_message` alert
+these messages in a contiguous sequence.  A fatal `unexpected_message` alert
 SHOULD be sent if these messages do not appear in sequence.
 
 A client MUST NOT initiate spontaneous authentication unless the server included
