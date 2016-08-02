@@ -112,6 +112,12 @@ server have the most significant bit cleared.
 An endpoint that wishes to offer spontaneous authentication sends a Certificate,
 CertificateVerify, and Finished message.
 
+~~~
+  Certificate
+  CertificateVerify
+  Finished              ---------->
+~~~
+
 No application data records or any other handshake messages can be interleaved
 with these messages.  An endpoint MUST abort a connection if it does not receive
 these message in a contiguous sequence.  A fatal `unexpected_message` alert
@@ -135,6 +141,14 @@ order in which the requests were made.
 If a request for authentication is accepted, the sequence of Certificate,
 CertificateVerify, and Finished messages are sent by the responding peer.  As
 with spontaneous authentication, these messages MUST form a contiguous sequence.
+
+~~~
+  CertificateRequest    ---------->
+                                           Certificate
+                                     CertificateVerify
+                        <----------           Finished
+~~~
+
 
 A request for authentication can be rejected by sending a Certificate message
 that contains an empty certificate_list field.  The extensions field of this
@@ -195,7 +209,7 @@ does not support any form of post-handshake authentication.
 
 If a server supports either form of client authentication (client_auth_solicited
 or client_auth_spontaneous), it MUST also include a "signature_algorithms"
-extension (defined in TLS 1.3 section 4.2.2.) containing a list of supported
+extension (see Section 4.2.2 of {{!I-D.ietf-tls-tls13}}) containing a list of supported
 signature schemes. This contains a list of the signature algorithms that the
 server is able to verify, listed in descending order of preference.
 
@@ -267,17 +281,18 @@ certificate_request_context:
   certificate_request_context in that message.
 
 certificate_list:
-: This is a sequence (chain) of certificates. The sender's certificate MUST come
-  first in the list. Each following certificate SHOULD directly certify one
-  preceding it. Because certificate validation requires that trust anchors be
-  distributed independently, a certificate that specifies a trust anchor MAY be
-  omitted from the chain, provided that supported peers are known to possess any
-  omitted certificates.
+: This is a sequence (chain) of certificates. The sender's end entity
+  certificate MUST come first in the list. Each following certificate SHOULD
+  directly certify one preceding it. Because certificate validation requires
+  that trust anchors be distributed independently, a certificate that specifies
+  a trust anchor MAY be omitted from the chain, provided that supported peers
+  are known to possess any omitted certificates.
 
-Valid extensions include OCSP Status extensions ([RFC6066] and [RFC6961]) and
-SignedCertificateTimestamps ([RFC6962]). Any extension presented in a
-Certificate message must only be presented if the associated ClientHello
-extension was presented in the initial handshake.
+extensions:
+: Valid extensions include OCSP Status extensions ({{!RFC6066}} and
+  {{!RFC6961}}) and SignedCertificateTimestamps ({{!RFC6962}}). Any extension
+  presented in a Certificate message must only be presented if the associated
+  ClientHello extension was presented in the initial handshake.
 
 The certificate_request_context is an opaque string that identifies the
 certificate. The certificate_request_context value MUST be unique for the
@@ -299,8 +314,8 @@ extension provided by the peer in the initial handshake.
 
 ## CertificateVerify Message
 
-The CertificateVerify message used in this document is defined in section
-4.3.2. of the TLS 1.3 specification.
+The CertificateVerify message used in this document is defined in Section
+4.3.2. of {{!I-D.ietf-tls-tls13}}.
 
 ~~~
     struct {
@@ -310,8 +325,8 @@ The CertificateVerify message used in this document is defined in section
 ~~~
 
 The algorithm field specifies the signature algorithm used (see Section 4.2.2 of
-TLS 1.3). The signature is a digital signature using that algorithm that covers
-the hash output:
+{{!I-D.ietf-tls-tls13}}). The signature is a digital signature using that
+algorithm that covers the hash output:
 
 ~~~
     Hash(Handshake Context + Certificate) + Hash(resumption_context)
@@ -326,14 +341,15 @@ The Handshake context and Base Key are defined in the following table:
 
 ## Finished Message
 
-Finished is a MAC over the value
+Finished is a MAC over the value:
 
 ~~~
     Hash(Handshake Context + Certificate + CertificateVerify) +
         Hash(resumption_context)
 ~~~
 
-The Finished messages uses a MAC key derived from the base key.
+The Finished message uses the same MAC key that is used in TLS 1.3, see Section
+4.3.3 of {{!I-D.ietf-tls-tls13}}.
 
 
 # Security Considerations
