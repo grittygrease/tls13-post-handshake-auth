@@ -142,12 +142,12 @@ must also include a "signature_algorithms" extension (defined in TLS 1.3 section
 of the signature algorithms that the server is able to verify, listed in
 descending order of preference.
 
-## Post-Handshake Authentication Messages
+# Post-Handshake Authentication Messages
 
 The messages used for post-handshake authentication closely mirror those used to
 authenticate certificates in the standard TLS handshake.
 
-### Certificate Request
+## Certificate Request
 
 For elicited post-handshake authentication, the first message is used to define
 the characteristics required in the elicited certificate.
@@ -182,7 +182,7 @@ specification. For CertificateRequests send from the client, a HostName
 containing the Server Name Indication (defined in [RFC6066]) used for
 selecting the certificate is included.
 
-### Certificate Message
+## Certificate Message
 
 The certificate message is used to transport the certificate. It mirrors the
 Certificate message in the TLS with the addition of some certificate-specific
@@ -221,7 +221,7 @@ must mirror the certificate_request_context sent in the CertificateRequest. If
 the Certificate message is part of an elicited authentication, the
 certificate_request_context is chosen uniquely by the sender.
 
-### CertificateVerify Message
+## CertificateVerify Message
 
 The CertificateVerify message used in this document is defined in section
 4.3.2. of the TLS 1.3 specification.
@@ -248,7 +248,7 @@ The Handshake context and Base Key are defined in the following table:
 | Spontaneous Authentication | ClientHello ... ClientFinished | traffic_secret_N |
 | Elicited Authentication | ClientHello ... ClientFinished + CertificateRequest | traffic_secret_N |
 
-### Finished Message
+## Finished Message
 
 Finished is a MAC over the value
 
@@ -259,11 +259,12 @@ Finished is a MAC over the value
 
 The Finished messages uses a MAC key derived from the base key.
 
-## Post-Handshake Authentication Flows
+
+# Post-Handshake Authentication Flows
 
 There are four post-handshake authentication exchanges.
 
-### Elicited Client Authentication Flow
+## Elicited Client Authentication Flow
 
 This flow is initiated by a CertificateRequest message from the server to the
 client. It should only be sent if the server’s EncryptedExtensions contains a
@@ -302,7 +303,7 @@ certificate MUST allow the key to be used for signing (i.e., the
 digitalSignature bit MUST be set if the Key Usage extension is present) with a
 signature scheme indicated in the server’s "signature_algorithms" extension.
 
-### Spontaneous Client Authentication Flow
+## Spontaneous Client Authentication Flow
 
 This flow is initiated by a contiguous sequence of Certificate,
 CertificateVerify, Finished message from the client to the server. The
@@ -322,7 +323,7 @@ certificate MUST allow the key to be used for signing (i.e., the
 digitalSignature bit MUST be set if the Key Usage extension is present) with a
 signature scheme indicated in the server’s "signature_algorithms" extension.
 
-### Elicited Server Authentication Flow
+## Elicited Server Authentication Flow
 
 This flow is initiated by a CertificateRequest message from the client to the
 server. The CertificateRequest should contain an odd-valued
@@ -353,7 +354,7 @@ close succession MAY respond to them in a different order than they were
 received (the certificate_request_context value allows the server to
 disambiguate the responses).
 
-### Spontaneous Server Authentication Flow
+## Spontaneous Server Authentication Flow
 
 This flow is initiated by a contiguous sequence of Certificate,
 CertificateVerify, Finished message from the server to the client. The
@@ -365,7 +366,7 @@ message should conform to the SignatureSchemes presented in the ClientHello.
         <- Certificate, CertificateVerify, Finished
 ~~~
 
-### Interaction With Resumption
+## Interaction With Resumption
 
 Certificate identity should not be maintained across resumption. If a connection
 is resumed, additional certificate identities for both client and server
