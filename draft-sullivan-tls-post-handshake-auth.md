@@ -83,8 +83,13 @@ authentication of peers. It has an advantage over renegotiation in that it only
 takes at most one round trip and it does not include an additional key exchange.
 
 This document describes spontaneous and solicited modes for both client and
-server authentication.  Support for each of these modes is negotiated using a
-new `post_handshake_auth` extension.  New handshake messages are defined for use
+server authentication. Spontaneous authentication allows an endpoint to
+advertise a certificate without explicitly being requested.  Solicited
+authentication allows an endpoint to request that its peer provide
+authentication details.
+
+Support for different modes of authentication is negotiated using a new
+`post_handshake_auth` extension.  New handshake messages are defined for use
 after completion of the initial handshake, these mirror the authentication
 messages that are used in the TLS 1.3 handshake.
 
@@ -113,8 +118,8 @@ authentication.
 ~~~
 
 The extension data for the `post_handshake_auth` extension is PostHandshakeAuth.
-
-Each AuthType value represents support for a given authentication flow.
+This includes one or more AuthType.  Each AuthType value represents support for
+a given authentication flow:
 
 client_auth_elicited:
 : indicates support for client authentication initiated by a server request
