@@ -8,5 +8,5 @@
 .refcache
 venv/
 issues.json
-lib/
+/lib
 draft-sullivan-tls-post-handshake-auth.xml
