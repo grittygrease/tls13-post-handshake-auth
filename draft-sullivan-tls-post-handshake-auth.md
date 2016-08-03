@@ -110,10 +110,6 @@ authentication.
 
     struct {
         AuthType auth_types<0..2^8-1>;
-        select (Role) {
-            case server:
-                SignatureScheme signature_algorithms<2..2^16-2>;
-        }
     } PostHandshakeAuth;
 ~~~
 
@@ -136,16 +132,19 @@ server_auth_spontaneous:
 The client includes a `post_handshake_auth` extension containing every type of
 authentication flow it supports in its ClientHello. The server replies with an
 EncryptedExtensions containing a `post_handshake_auth` extension containing a
-list of authentication types and the list of signature schemes supported. The
-set of AuthTypes in the server’s `post_handshake_auth` extension MUST be a
-subset of the set sent by the client. The extension MAY be omitted if the server
-does not support any form of post-handshake authentication.
+list of authentication types that it supports. The set of AuthTypes in the
+server’s `post_handshake_auth` extension MUST be a subset of those sent by the
+client.
 
-If a server supports either client_auth_elicited, or client_auth_spontaneous, it
-must also include a "signature_algorithms" extension (defined in TLS 1.3 section
-4.2.2.) containing a list of supported signature schemes. This contains a list
-of the signature algorithms that the server is able to verify, listed in
-descending order of preference.
+The `post_handshake_auth` extension MUST be omitted if the server does not
+support any mode of post-handshake authentication in common with the client.
+
+If a server declares support for either client_auth_elicited, or
+client_auth_spontaneous, it MUST also include a "signature_algorithms" extension
+(see Section 4.2.2 of {{!I-D.ietf-tls-tls13}}). This contains a list of the
+signature schemes that the server is able to use for client authentication,
+listed in descending order of preference.
+
 
 # Post-Handshake Authentication Messages
 
