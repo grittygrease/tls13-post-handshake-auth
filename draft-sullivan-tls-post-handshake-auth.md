@@ -45,7 +45,7 @@ informative:
 
 This document describes a mechanism for performing post-handshake
 certificate-based authentication in Transport Layer Security (TLS) versions 1.3
-and later. This includes both spontaneous and elicited authentication of both
+and later. This includes both spontaneous and solicited authentication of both
 client and server.
 
 --- middle
@@ -54,7 +54,7 @@ client and server.
 
 This document defines a way to authenticate one party of a Transport Layer
 Security (TLS) communication to another using a certificate after the session
-has been established. This allows both the client and server elicit proof of
+has been established. This allows both the client and server to solicit proof of
 ownership of additional identities at any time after the handshake has
 completed. It also allows for both the client and server to spontaneously
 provide a certificate and proof of ownership of the private key to the other
@@ -205,7 +205,7 @@ client.
 The `post_handshake_auth` extension MUST be omitted if the server does not
 support any mode of post-handshake authentication in common with the client.
 
-If a server declares support for either client_auth_elicited, or
+If a server declares support for either client_auth_solicited, or
 client_auth_spontaneous, it MUST also include a "signature_algorithms" extension
 (see Section 4.2.2 of {{!I-D.ietf-tls-tls13}}). This contains a list of the
 signature schemes that the server is able to use for client authentication,
@@ -220,8 +220,8 @@ authenticate certificates in the standard TLS handshake.
 
 ## Certificate Request
 
-For elicited post-handshake authentication, the first message is used to define
-the characteristics required in the elicited certificate.
+For solicited post-handshake authentication, the first message is used to define
+the characteristics required in the solicited certificate.
 
 ~~~
     opaque DistinguishedName<1..2^16-1>;
