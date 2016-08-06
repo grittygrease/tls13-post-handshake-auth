@@ -377,11 +377,17 @@ MAC key; the hash function and HMAC function are the negotiated PRF hash
 function.
 
 
-## Interaction With Resumption
+## Forgetting certificates
 
 Certificate identity should not be maintained across resumption. If a connection
 is resumed, additional certificate identities for both client and server
-certificates should be forgotten.
+certificates SHOULD be forgotten. Either the client or the server MAY choose to
+forget a certificate identity at any time.
+
+Repeated requests for the same certificate should be expected. If multiple
+certificate requests are recieved that differ only in the
+certificate_request_context value, it is permitted to only answer the most
+recent request.
 
 
 # Security Considerations
