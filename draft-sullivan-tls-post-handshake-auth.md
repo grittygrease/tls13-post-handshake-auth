@@ -377,16 +377,16 @@ MAC key; the hash function and HMAC function are the negotiated PRF hash
 function.
 
 
-# Post-Handshake Authentication Flows
-
-TBD
-
-
 ## Interaction With Resumption
 
 Certificate identity should not be maintained across resumption. If a connection
 is resumed, additional certificate identities for both client and server
 certificates should be forgotten.
+
+
+# Security Considerations
+
+TBD
 
 
 # Acknowledgements {#ack}
