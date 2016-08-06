@@ -211,6 +211,9 @@ client_auth_spontaneous, it MUST also include a "signature_algorithms" extension
 signature schemes that the server is able to use for client authentication,
 listed in descending order of preference.
 
+This extension is not compatible with the raw public key extension {{!RFC7250}}.
+The server MUST NOT select the raw public key extension if it uses this
+mechanism.
 
 # Post-Handshake Authentication Messages
 
