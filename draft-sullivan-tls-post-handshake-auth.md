@@ -35,6 +35,7 @@ normative:
   RFC6066:
   RFC6961:
   RFC6962:
+  RFC7250:
   I-D.ietf-tls-tls13:
 
 informative:
@@ -64,7 +65,7 @@ This mechanism is useful in the following situations:
 
 * servers that have the ability to serve requests from multiple domains over the
   same connection but do not have a certificate that is simultaneously
-  authoritative over all of them
+  authoritative for all of them
 
 * servers that have resources that require client authentication to access and
   need to request client authentication after the connection has started
@@ -235,7 +236,7 @@ the characteristics required in the solicited certificate.
     } CertificateExtension;
 
     struct {
-        opaque certificate_request_context<0..2^8-1>;
+        opaque certificate_request_context<1..2^8-1>;
         select (Role) {
             case server:
                 DistinguishedName certificate_authorities<0..2^16-1>;
@@ -400,6 +401,7 @@ TBD
 
 # Acknowledgements {#ack}
 
-Eric Rescorla and Andrei Popov contributed to this draft.
+Eric Rescorla and Andrei Popov were involved in helpful discussions around this
+draft.
 
 --- back
