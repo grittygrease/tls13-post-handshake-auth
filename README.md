@@ -3,6 +3,7 @@
 This is the working area for the Individual internet-draft, "Post-Handshake Authentication in TLS".
 
 * [Editor's copy](https://grittygrease.github.io/tls13-post-handshake-auth/)
+* [Latest individual draft](https://tools.ietf.org/html/draft-sullivan-tls-post-handshake-auth)
 
 ## Building the Draft
 
