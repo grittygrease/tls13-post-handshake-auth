@@ -46,7 +46,7 @@ informative:
 
 This document describes a mechanism for performing post-handshake
 certificate-based authentication in Transport Layer Security (TLS) versions 1.3
-and later. This includes both spontaneous and solicited authentication of both
+and later.  This includes both spontaneous and solicited authentication of both
 client and server.
 
 --- middle
@@ -55,9 +55,9 @@ client and server.
 
 This document defines a way to authenticate one party of a Transport Layer
 Security (TLS) communication to another using a certificate after the session
-has been established. This allows both the client and server to solicit proof of
+has been established.  This allows both the client and server to solicit proof of
 ownership of additional identities at any time after the handshake has
-completed. It also allows for both the client and server to spontaneously
+completed.  It also allows for both the client and server to spontaneously
 provide a certificate and proof of ownership of the private key to the other
 party.
 
@@ -80,11 +80,11 @@ This mechanism is useful in the following situations:
   by the certificate included in the initial handshake
 
 This document intends to replace the use of renegotiation for changing the
-authentication of peers. It has an advantage over renegotiation in that it only
+authentication of peers.  It has an advantage over renegotiation in that it only
 takes at most one round trip and it does not include an additional key exchange.
 
 This document describes spontaneous and solicited modes for both client and
-server authentication. Spontaneous authentication allows an endpoint to
+server authentication.  Spontaneous authentication allows an endpoint to
 advertise a certificate without explicitly being requested.  Solicited
 authentication allows an endpoint to request that its peer provide
 authentication details.
@@ -197,9 +197,9 @@ server_auth_spontaneous:
 : indicates support for spontaneous server authentication
 
 The client includes a `post_handshake_auth` extension containing every type of
-authentication flow it supports in its ClientHello. The server replies with an
+authentication flow it supports in its ClientHello.  The server replies with an
 EncryptedExtensions containing a `post_handshake_auth` extension containing a
-list of authentication types that it supports. The set of AuthTypes in the
+list of authentication types that it supports.  The set of AuthTypes in the
 server’s `post_handshake_auth` extension MUST be a subset of those sent by the
 client.
 
@@ -208,7 +208,7 @@ support any mode of post-handshake authentication in common with the client.
 
 If a server declares support for either client_auth_solicited, or
 client_auth_spontaneous, it MUST also include a "signature_algorithms" extension
-(see Section 4.2.2 of {{!I-D.ietf-tls-tls13}}). This contains a list of the
+(see Section 4.2.2 of {{!I-D.ietf-tls-tls13}}).  This contains a list of the
 signature schemes that the server is able to use for client authentication,
 listed in descending order of preference.
 
@@ -249,8 +249,8 @@ the characteristics required in the solicited certificate.
 
 The certificate_request_context is an opaque string which identifies the
 certificate request and which will be echoed in the corresponding Certificate
-message. The certificate_request_context value MUST be unique for the
-connection. A client MUST set the most significant bit of the first octet of the
+message.  The certificate_request_context value MUST be unique for the
+connection.  A client MUST set the most significant bit of the first octet of the
 certificate_request_context; a server MUST clear this bit.
 
 For CertificateRequests sent from the server, the DistinguishedName and
@@ -264,7 +264,7 @@ included.
 
 ## Certificate Message
 
-The certificate message is used to transport the certificate. It mirrors the
+The certificate message is used to transport the certificate.  It mirrors the
 Certificate message in the TLS with the addition of some certificate-specific
 extensions.
 
@@ -283,24 +283,24 @@ certificate_request_context:
   certificate_request_context in that message.
 
 certificate_list:
-: This is a sequence (chain) of certificates. The sender's end entity
-  certificate MUST come first in the list. Each following certificate SHOULD
-  directly certify one preceding it. Because certificate validation requires
+: This is a sequence (chain) of certificates.  The sender's end entity
+  certificate MUST come first in the list.  Each following certificate SHOULD
+  directly certify one preceding it.  Because certificate validation requires
   that trust anchors be distributed independently, a certificate that specifies
   a trust anchor MAY be omitted from the chain, provided that supported peers
   are known to possess any omitted certificates.
 
 extensions:
 : Valid extensions include OCSP Status extensions ({{!RFC6066}} and
-  {{!RFC6961}}) and SignedCertificateTimestamps ({{!RFC6962}}). Any extension
+  {{!RFC6961}}) and SignedCertificateTimestamps ({{!RFC6962}}).  Any extension
   presented in a Certificate message must only be presented if the associated
   ClientHello extension was presented in the initial handshake.
 
 The certificate_request_context is an opaque string that identifies the
-certificate. The certificate_request_context value MUST be unique for the
-connection. If the certificate is used in response to a CertificateRequest,
+certificate.  The certificate_request_context value MUST be unique for the
+connection.  If the certificate is used in response to a CertificateRequest,
 certificate_request_context includes the certificate_request_context value in
-the corresponding CertificateRequest. If the Certificate message part of
+the corresponding CertificateRequest.  If the Certificate message part of
 spontaneous authentication, the certificate_request_context value is chosen by
 the sender.  When spontaneous authentication is used, a client MUST set the most
 significant bit of the first octet of the certificate_request_context; a server
@@ -308,7 +308,7 @@ MUST clear this bit.
 
 Any certificates provided MUST be signed using a signature scheme found in the
 "signature_algorithms" extension provided by the peer in the initial
-handshake. The end entity certificate MUST allow the key to be used for signing
+handshake.  The end entity certificate MUST allow the key to be used for signing
 (i.e., the digitalSignature bit MUST be set if the Key Usage extension is
 present) with a signature scheme indicated in the "signature_algorithms"
 extension provided by the peer in the initial handshake.
@@ -327,7 +327,7 @@ The CertificateVerify message used in this document is defined in Section
 ~~~
 
 The algorithm field specifies the signature algorithm used (see Section 4.2.2 of
-{{!I-D.ietf-tls-tls13}}). The signature is a digital signature using that
+{{!I-D.ietf-tls-tls13}}).  The signature is a digital signature using that
 algorithm that covers the handshake context, the resumption context and a hash
 of the CertificateRequest and Certificate messages:
 
@@ -363,6 +363,7 @@ concatenation of the ASCII-encoded strings:
 Thus, a client that is responding to a CertificateRequest will use the string
 "TLS 1.3, client solicited CertificateVerify" as the context string.
 
+
 ## Finished Message
 
 Finished is defined in Section 4.3.3 of {{!I-D.ietf-tls-tls13}}.  When included
@@ -383,12 +384,12 @@ function.
 
 ## Forgetting certificates
 
-Certificate identity should not be maintained across resumption. If a connection
+Certificate identity should not be maintained across resumption.  If a connection
 is resumed, additional certificate identities for both client and server
-certificates SHOULD be forgotten. Either the client or the server MAY choose to
+certificates SHOULD be forgotten.  Either the client or the server MAY choose to
 forget a certificate identity at any time.
 
-Repeated requests for the same certificate should be expected. If multiple
+Repeated requests for the same certificate should be expected.  If multiple
 certificate requests are recieved that differ only in the
 certificate_request_context value, it is permitted to only answer the most
 recent request.
