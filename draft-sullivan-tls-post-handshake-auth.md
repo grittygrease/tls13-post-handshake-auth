@@ -160,6 +160,9 @@ client_auth_solicited in its `post_handshake_auth` extension.  Similarly, a
 server MUST NOT request client authentication unless it included
 client_auth_solicited in its `post_handshake_auth` extension.
 
+If the server supplies an empty Certificate message, the client MUST terminate
+the handshake with a fatal “decode_error” alert.
+
 
 # Post-Handshake Authentication TLS Extension
 
@@ -215,6 +218,7 @@ listed in descending order of preference.
 This extension is not compatible with the raw public key extension {{!RFC7250}}.
 The server MUST NOT select the raw public key extension if it uses this
 mechanism.
+
 
 # Post-Handshake Authentication Messages
 
@@ -393,6 +397,29 @@ Repeated requests for the same certificate should be expected.  If multiple
 certificate requests are recieved that differ only in the
 certificate_request_context value, it is permitted to only answer the most
 recent request.
+
+
+## Error handling
+
+If a client has not advertised support for solicited client authentication and
+receives a CertificateRequest message, a fatal `unexpected_message` alert
+SHOULD be sent. Similarly, if a server has not advertised support for solicited
+server authentication and receives a CertificateRequest message, a fatal
+`unexpected_message` alert SHOULD be sent.
+
+If a client has not advertised support for spontaneous server authentication and
+receives a Certificate message with an unknown certificate_request_context, a
+fatal `unexpected_message` alert SHOULD be sent. Similarly, if a server has not
+advertised support for spontaneous client authentication and receives a
+CertificateRequest with an unknown certificate_request_context, a fatal
+`unexpected_message` alert SHOULD be sent.
+
+If a client receives a Certificate message with the most significant bit set as
+part of a spontaneous authentication or a CertificateRequest with the most
+significant bit set, a fatal `unexpected_message` alert SHOULD be sent. Similarly,
+if a server receives a Certificate message with the most significant bit unset as
+part of a spontaneous authentication or a CertificateRequest with the most
+significant bit unset, a fatal `unexpected_message` alert SHOULD be sent.
 
 
 # Security Considerations
